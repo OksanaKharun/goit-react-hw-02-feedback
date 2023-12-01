@@ -1,16 +1,35 @@
-export const App = () => {
+import React, { useState } from 'react';
+import FeedbackOptions from './FeedbackOptions';
+import Statistics from './Statistics';
+import Section from './Section';
+
+const App = () => {
+  const [state, setState] = useState({
+    good: 0,
+    neutral: 0,
+    bad: 0
+  });
+
+  const handleFeedback = (type) => {
+    setState((prev) => ({ ...prev, [type]: prev[type] + 1 }));
+  };
+
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
+   <div className="container">
+      <div className="wrapper">
+      <Section title="Please leave feedback">
+        <FeedbackOptions options={['good', 'neutral', 'bad']} onLeaveFeedback={handleFeedback} />
+      </Section>
+      {state.good + state.neutral + state.bad > 0 ? (
+        <Section title="Statistics">
+          <Statistics good={state.good} neutral={state.neutral} bad={state.bad} />
+        </Section>
+      ) : (
+        <p>No feedback given</p>
+      )}
+      </div>
+      </div>
   );
 };
+
+export default App;
